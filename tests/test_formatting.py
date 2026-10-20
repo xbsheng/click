@@ -590,6 +590,37 @@ def test_help_formatter_write_usage(
     assert f.getvalue() == expected
 
 
+def test_help_formatter_write_usage_keeps_options_whole():
+    """An option is not split at a hyphen when the usage line wraps (#3362).
+
+    Options are single tokens: ``--max-retry-count`` broken into ``--max-`` and
+    ``retry-count`` reads as two options on the second line.
+    """
+    options = " ".join(
+        [
+            "--enable-verbose-logging",
+            "--output-file-path",
+            "--max-retry-count",
+            "--disable-cache-mode",
+            "--config-file-location",
+            "--user-auth-token",
+            "--auto-update-interval",
+            "--force-overwrite-existing",
+            "--network-timeout-seconds",
+            "--debug-trace-enabled",
+        ]
+    )
+    f = click.HelpFormatter(width=65)
+    f.write_usage("program", options)
+    assert f.getvalue() == (
+        "Usage: program --enable-verbose-logging --output-file-path\n"
+        "               --max-retry-count --disable-cache-mode\n"
+        "               --config-file-location --user-auth-token\n"
+        "               --auto-update-interval --force-overwrite-existing\n"
+        "               --network-timeout-seconds --debug-trace-enabled\n"
+    )
+
+
 def test_help_formatter_write_usage_without_args_styled_prefix():
     """A downstream-styled prefix is preserved when ``args`` is empty:
     the ANSI escape sequences survive, only the trailing separator is

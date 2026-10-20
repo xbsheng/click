@@ -19,6 +19,9 @@ Unreleased
   for options, so its value changes from `my_option` to `--my-option`. Click no
   longer reads it, and a subclass that overrides it gets a warning when the class
   is defined. {pr}`3877`
+- `HelpFormatter.write_usage` no longer breaks an option at a hyphen when the
+  usage line wraps, so `--max-retry-count` stays one token instead of becoming
+  `--max-` and `retry-count`. {issue}`3362`
 
 ## Version 8.5.1
 
